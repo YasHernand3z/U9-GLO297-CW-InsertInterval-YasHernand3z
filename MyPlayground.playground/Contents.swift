@@ -1,4 +1,4 @@
-func mergeIntervals02(intervals: [(Int, Int)], newInterval: (Int, Int)) -> [(Int, Int)] {
+func mergeIntervals(intervals: [(Int, Int)], newInterval: (Int, Int)) -> [(Int, Int)] {
     if intervals.count == 0 {
         return [newInterval]
     }
@@ -30,9 +30,9 @@ func mergeIntervals02(intervals: [(Int, Int)], newInterval: (Int, Int)) -> [(Int
 }
 
 
-let newIntervals01 = mergeIntervals02(intervals: [(1,3), (6,9)], newInterval: (2,8))
-let newIntervals02 = mergeIntervals02(intervals: [], newInterval: (2,8))
-let newIntervals03 = mergeIntervals02(intervals: [(1,3), (6,9)], newInterval: (2,5))
-let newIntervals04 = mergeIntervals02(intervals: [(1,2), (3,5), (6,7), (8,10), (12, 16)], newInterval: (4,9))
-let newIntervals05 = mergeIntervals02(intervals: [(1,3), (6,9), (12,16)], newInterval: (2,5))
-let newIntervals06 = mergeIntervals02(intervals: [(6,9), (12,16)], newInterval: (1,3))
+let newIntervals01 = mergeIntervals(intervals: [(1,3), (6,9)], newInterval: (2,8))
+let newIntervals02 = mergeIntervals(intervals: [], newInterval: (2,8))
+let newIntervals03 = mergeIntervals(intervals: [(1,3), (6,9)], newInterval: (2,5))
+let newIntervals04 = mergeIntervals(intervals: [(1,2), (3,5), (6,7), (8,10), (12, 16)], newInterval: (4,9))
+let newIntervals05 = mergeIntervals(intervals: [(1,3), (6,9), (12,16)], newInterval: (2,5))
+let newIntervals06 = mergeIntervals(intervals: [(6,9), (12,16)], newInterval: (1,3))
