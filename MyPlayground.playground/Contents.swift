@@ -7,8 +7,6 @@ func mergeIntervals(intervals: [(Int, Int)], newInterval: (Int, Int)) -> [(Int, 
     var indexEnd = intervals.lastIndex(where: {return newInterval.1 > $0.0}) ?? 0
     var newIntervals: [(Int, Int)] = []
     
-    print("\(indexStart) \(indexStart)")
-    
     if indexStart > 0 {
         newIntervals.append(contentsOf: intervals[0..<indexStart])
         newIntervals.append(updateInterval(startInterval: intervals[indexStart], endInterval: intervals[indexEnd], newInterval: newInterval))
