@@ -1,54 +1,57 @@
 func mergeIntervals(intervals: [(Int, Int)], newInterval: (Int, Int)) -> [(Int, Int)] {
-    if intervals.count == 0 {
-        return [newInterval]
-    }
     
-    var indexStart = intervals.lastIndex(where: {return newInterval.0 >= $0.0}) ?? 0
-    var indexEnd = intervals.firstIndex(where: {return newInterval.1 <= $0.1 && newInterval.1 >= $0.0}) ?? 0
+    var hasFinished = false
+    var indexStart = 0
+
+    
     var newIntervals: [(Int, Int)] = []
     
-    if indexStart > 0 {
-        newIntervals.append(contentsOf: intervals[0..<indexStart])
+    var auxIntervals: [(Int, Int)] = []
+    auxIntervals.append(contentsOf: intervals)
+    auxIntervals.append(newInterval)
+    auxIntervals = auxIntervals.sorted{ $0.0 < $1.0 }
+    
+    if auxIntervals.count == 1 {
+        return auxIntervals
     }
     
-    var index = 0
-   
+    let count = auxIntervals.count - 1
+    var startPoint: (Int, Int) = auxIntervals[indexStart]
+    var endPoint: (Int, Int) = auxIntervals[indexStart + 1]
     
-    if isOverlaping(intervalA: newInterval, intervalB: intervals[indexStart]) {
-        newIntervals.append(updateInterval(startInterval: intervals[indexStart], endInterval: intervals[indexEnd], newInterval: newInterval))
-        index = indexEnd + 1
-    } else {
-        newIntervals.append(contentsOf: [newInterval, intervals[indexStart]].sorted{$0.0 < $1.0})
-        index = indexStart == indexEnd ? index + 1 : indexEnd
-
+    
+    
+    while !hasFinished {
+        
+        if isOverlaping(intervalA: startPoint, intervalB: endPoint) {
+            indexStart += 1
+            let value0 = startPoint.0 < endPoint.0 ? startPoint.0 : endPoint.0
+            let value1 = startPoint.1 > endPoint.1 ? startPoint.1 : endPoint.1
+            startPoint = (value0, value1)
+            if indexStart + 1 > count {
+                newIntervals.append(startPoint)
+                hasFinished = true
+            } else {
+                endPoint = auxIntervals[indexStart+1]
+            }
+        } else {
+            newIntervals.append(startPoint)
+            indexStart += 1
+            if indexStart >=  count {
+                newIntervals.append(endPoint)
+                hasFinished = true
+            } else {
+                startPoint = auxIntervals[indexStart]
+                endPoint = auxIntervals[indexStart + 1]
+            }
+        }
     }
-    
-    let count = intervals.count - 1
-    if index < count {
-        newIntervals.append(contentsOf: intervals[index...count])
-    } else if index == count {
-        newIntervals.append(intervals[index])
-    }
-    
     
     return newIntervals
 }
 
 func isOverlaping(intervalA: (Int, Int), intervalB: (Int, Int)) -> Bool {
-    
-    var auxIntervals = [intervalA, intervalB]
-    auxIntervals = auxIntervals.sorted {
-        $0.0 < $1.0
-    }
-    return  auxIntervals[0].1 >= auxIntervals[1].0 || auxIntervals[0].1 >= auxIntervals[1].1
-}
-
-func updateInterval(startInterval: (Int, Int), endInterval: (Int, Int), newInterval: (Int, Int)) -> (Int, Int)
-{
-    let startRange = startInterval.0 < newInterval.0 ? startInterval.0 : newInterval.0
-    let endRange = endInterval.1 > newInterval.1 ? endInterval.1 : newInterval.1
-    
-    return (startRange, endRange)
+    return  intervalA.1 > intervalB.0 || intervalA.1 > intervalB.1
 }
 
 
